@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📈 Relative Max & Min of Polynomials - رياضيات 12 عام | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي عن إيجاد القيم العظمى والصغرى النسبية للدوال كثيرة الحدود - صف 12 عام">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; direction: ltr; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+body.en-mode .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+body.en-mode .shuffle-badge { margin-right: 0; margin-left: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.1em; padding: 2px 6px; background: #fef3c7; border-radius: 4px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+body.en-mode .save-indicator { left: auto; right: 20px; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; max-width: 100%; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ <span data-ar="الوقت المتبقي:" data-en="Time Left:">الوقت المتبقي:</span></span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">75:00</span>
+<span class="shuffle-badge">📈 <span data-ar="القيم العظمى والصغرى" data-en="Relative Max & Min">القيم العظمى والصغرى</span> - 30 <span data-ar="سؤال" data-en="Questions">سؤال</span></span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 <span data-ar="إظهار/إخفاء الإجابات" data-en="Show/Hide Answers">إظهار/إخفاء الإجابات</span></button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">🖨️ <span data-ar="طباعة" data-en="Print">طباعة</span></button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 <span data-ar="أسئلة جديدة" data-en="New Questions">أسئلة جديدة</span></button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ <span data-ar="مسح التقدم" data-en="Clear Progress">مسح التقدم</span></button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH GRADE 12 GENERAL - QUESTION 13</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📈 <span data-ar="إيجاد القيم العظمى والصغرى النسبية للدوال كثيرة الحدود" data-en="Finding Relative Maximum and Minimum of Polynomial Functions">إيجاد القيم العظمى والصغرى النسبية للدوال كثيرة الحدود</span></h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2"><span data-ar="رياضيات صف 12 عام - ص 124 (مثال 3)" data-en="Grade 12 General - Page 124 (Example 3)">رياضيات صف 12 عام - ص 124 (مثال 3)</span></h2>
+<p class="text-gray-600 mb-4"><span data-ar="Relative Extrema, Turning Points & Local Max/Min" data-en="Relative Extrema, Turning Points & Local Max/Min">القيم القصوى النسبية، نقاط الانعطاف والقيم العظمى/الصغرى المحلية</span></p>
+<p class="text-sm text-green-600 font-semibold">💾 <span data-ar="يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام" data-en="Your progress is auto-saved - 30 questions in 6 sections">يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</span></p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 <span data-ar="التاريخ:" data-en="Date:">التاريخ:</span> <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 <span data-ar="الاسم:" data-en="Name:">الاسم:</span> <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" data-placeholder-ar="اكتب اسمك" data-placeholder-en="Your name" placeholder="اكتب اسمك"></span>
+<span>🏫 <span data-ar="الشعبة:" data-en="Class:">الشعبة:</span> <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" data-placeholder-ar="الشعبة" data-placeholder-en="Class" placeholder="الشعبة"></span>
+<span>⏰ <span data-ar="المدة: 75 دقيقة" data-en="Duration: 75 min">المدة: 75 دقيقة</span></span>
+<span>📊 <span data-ar="المجموع: 100 درجة" data-en="Total: 100 points">المجموع: 100 درجة</span></span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 <span data-ar="المفاهيم الأساسية" data-en="Key Concepts">المفاهيم الأساسية</span></h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box">
+<strong><span data-ar="القيمة العظمى النسبية:" data-en="Relative Maximum:">القيمة العظمى النسبية:</span></strong><br>
+<span data-ar="نقطة أعلى من جيرانها مباشرة" data-en="Point higher than nearby points">نقطة أعلى من جيرانها مباشرة</span><br>
+<span class="math-display">f'(x) = 0, f''(x) < 0</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="القيمة الصغرى النسبية:" data-en="Relative Minimum:">القيمة الصغرى النسبية:</span></strong><br>
+<span data-ar="نقطة أدنى من جيرانها مباشرة" data-en="Point lower than nearby points">نقطة أدنى من جيرانها مباشرة</span><br>
+<span class="math-display">f'(x) = 0, f''(x) > 0</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="نقاط الانعطاف:" data-en="Turning Points:">نقاط الانعطاف:</span></strong><br>
+<span data-ar="عدد نقاط الانعطاف ≤ n - 1" data-en="Number of turning points ≤ n - 1">عدد نقاط الانعطاف ≤ n - 1</span><br>
+<span data-ar="حيث n درجة كثير الحدود" data-en="where n is polynomial degree">حيث n درجة كثير الحدود</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="من الرسم البياني:" data-en="From Graph:">من الرسم البياني:</span></strong><br>
+<span data-ar="القيمة العظمى: قمة محلية" data-en="Relative max: local peak">القيمة العظمى: قمة محلية (∩)</span><br>
+<span data-ar="القيمة الصغرى: قاع محلي" data-en="Relative min: local valley">القيمة الصغرى: قاع محلي (∪)</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="من جدول القيم:" data-en="From Table:">من جدول القيم:</span></strong><br>
+<span data-ar="ابحث عن تغير الاتجاه" data-en="Look for direction change">ابحث عن تغير الاتجاه</span><br>
+<span data-ar="من تزايد إلى تناقص = عظمى" data-en="Increasing to decreasing = max">من تزايد إلى تناقص = عظمى</span><br>
+<span data-ar="من تناقص إلى تزايد = صغرى" data-en="Decreasing to increasing = min">من تناقص إلى تزايد = صغرى</span>
+</div>
+<div class="formula-box">
+<strong><span data-ar="القاعدة العامة:" data-en="General Rule:">القاعدة العامة:</span></strong><br>
+<span class="math-display">Degree n → at most n-1 turning points</span><br>
+<span data-ar="درجة n → على الأكثر n-1 نقطة انعطاف" data-en="Degree n → at most n-1 turning points">درجة n → على الأكثر n-1 نقطة انعطاف</span>
+</div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 <span data-ar="صحح إجاباتي!" data-en="Grade My Exam!">صحح إجاباتي!</span></button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 <span data-ar="نتيجتك يا بطل!" data-en="Your Result, Champion!">نتيجتك يا بطل!</span> 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 <span data-ar="الاسم" data-en="Name">الاسم</span></p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 <span data-ar="التاريخ" data-en="Date">التاريخ</span></p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 <span data-ar="المجموع" data-en="Total">المجموع</span></p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500"><span data-ar="نسبة النجاح" data-en="Success Rate">نسبة النجاح</span></p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 <span data-ar="أداؤك في كل قسم:" data-en="Your Performance by Section:">أداؤك في كل قسم:</span></h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 <span data-ar="أرسل النتيجة للمعلم" data-en="Send Result to Teacher">أرسل النتيجة للمعلم</span></button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Relative Max & Min of Polynomials - Grade 12 General | Mr. Mohammed Hesham 📈
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'relative_extrema_grade12_v1';
+const TOTAL_TIME = 4500;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+    q48_cubic_graph: `<svg class="svg-graph" width="450" height="400" viewBox="0 0 450 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="440" height="390" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="225" y="25" text-anchor="middle" font-size="13" fill="#92400e" font-weight="bold">السؤال 48: f(x) = x³ - 4x² - 2x + 3</text>
+        <!-- Grid -->
+        <g stroke="#e5e7eb" stroke-width="0.5">
+            ${Array.from({length: 19}, (_, i) => `<line x1="${50 + i*20}" y1="50" x2="${50 + i*20}" y2="350"/>`).join('')}
+            ${Array.from({length: 16}, (_, i) => `<line x1="50" y1="${50 + i*20}" x2="410" y2="${50 + i*20}"/>`).join('')}
+        </g>
+        <!-- Axes -->
+        <line x1="50" y1="230" x2="420" y2="230" stroke="#374151" stroke-width="2" marker-end="url(#arrow48)"/>
+        <line x1="150" y1="350" x2="150" y2="40" stroke="#374151" stroke-width="2" marker-end="url(#arrow48)"/>
+        <text x="425" y="235" font-size="11" fill="#374151" font-weight="bold">x</text>
+        <text x="140" y="35" font-size="11" fill="#374151" font-weight="bold">y</text>
+        <text x="155" y="245" font-size="10" fill="#374151">O</text>
+        <!-- Scale -->
+        <text x="170" y="245" font-size="9" fill="#6b7280">1</text>
+        <text x="190" y="245" font-size="9" fill="#6b7280">2</text>
+        <text x="210" y="245" font-size="9" fill="#6b7280">3</text>
+        <text x="230" y="245" font-size="9" fill="#6b7280">4</text>
+        <text x="250" y="245" font-size="9" fill="#6b7280">5</text>
+        <text x="130" y="245" font-size="9" fill="#6b7280">-1</text>
+        <text x="110" y="245" font-size="9" fill="#6b7280">-2</text>
+        <text x="145" y="210" font-size="9" fill="#6b7280">4</text>
+        <text x="145" y="190" font-size="9" fill="#6b7280">8</text>
+        <text x="145" y="250" font-size="9" fill="#6b7280">-4</text>
+        <text x="145" y="270" font-size="9" fill="#6b7280">-8</text>
+        <text x="145" y="290" font-size="9" fill="#6b7280">-12</text>
+        <!-- f(x) = x³ - 4x² - 2x + 3 -->
+        <!-- f'(x) = 3x² - 8x - 2 = 0 → x = (8±√(64+24))/6 = (8±√88)/6 ≈ (8±9.38)/6 → x ≈ -0.23 or x ≈ 2.90 -->
+        <!-- f(-0.23) ≈ 3.23 (local max), f(2.90) ≈ -12.07 (local min) -->
+        <path d="M 70 340 Q 90 300 110 250 Q 130 200 145 175 Q 150 170 155 175 Q 170 200 190 250 Q 210 290 230 310 Q 250 320 270 310 Q 290 290 310 250 Q 330 200 350 150 Q 370 100 390 60" fill="none" stroke="#2563eb" stroke-width="3"/>
+        <!-- Local maximum near x = -0.23 (slightly left of y-axis) -->
+        <circle cx="145" cy="175" r="6" fill="#dc2626"/>
+        <text x="100" y="165" font-size="9" fill="#dc2626" font-weight="bold">Local Max</text>
+        <text x="100" y="178" font-size="9" fill="#dc2626">near x ≈ -0.23</text>
+        <!-- Local minimum near x = 2.90 -->
+        <circle cx="270" cy="310" r="6" fill="#16a34a"/>
+        <text x="270" y="330" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="bold">Local Min</text>
+        <text x="270" y="342" text-anchor="middle" font-size="9" fill="#16a34a">near x ≈ 2.90</text>
+        <!-- Y-intercept -->
+        <circle cx="150" cy="200" r="4" fill="#f59e0b"/>
+        <text x="160" y="195" font-size="9" fill="#f59e0b">(0, 3)</text>
+        <!-- Info -->
+        <rect x="20" y="355" width="400" height="30" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="225" y="375" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Relative max near x ≈ -0.23, Relative min near x ≈ 2.90</text>
+        <defs><marker id="arrow48" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`,
+    
+    q49_table: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="13" fill="#1e40af" font-weight="bold">السؤال 49: جدول قيم f(x) = x³ - 4x² - 2x + 3</text>
+        <!-- Table -->
+        <rect x="50" y="50" width="400" height="35" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="90" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">x</text>
+        <text x="150" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-2</text>
+        <text x="210" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-1</text>
+        <text x="270" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">0</text>
+        <text x="330" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">1</text>
+        <text x="390" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">2</text>
+        <text x="430" y="73" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">3</text>
+        <rect x="50" y="85" width="400" height="35" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="90" y="108" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">f(x)</text>
+        <text x="150" y="108" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-17</text>
+        <text x="210" y="108" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="bold">0</text>
+        <text x="270" y="108" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="bold">3</text>
+        <text x="330" y="108" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-2</text>
+        <text x="390" y="108" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-9</text>
+        <text x="430" y="108" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-12</text>
+        <!-- Continuation -->
+        <rect x="50" y="120" width="400" height="35" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="90" y="143" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">x</text>
+        <text x="150" y="143" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">4</text>
+        <text x="210" y="143" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">5</text>
+        <rect x="50" y="155" width="400" height="35" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="90" y="178" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">f(x)</text>
+        <text x="150" y="178" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">-4</text>
+        <text x="210" y="178" text-anchor="middle" font-size="11" fill="#16a34a" font-weight="bold">18</text>
+        <!-- Analysis -->
+        <rect x="20" y="210" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="230" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🔍 Analysis (التحليل):</text>
+        <text x="250" y="250" text-anchor="middle" font-size="10" fill="#92400e">f(-2)=-17 → f(-1)=0 → f(0)=3 (INCREASING) → f(1)=-2 (DECREASING)</text>
+        <text x="250" y="268" text-anchor="middle" font-size="10" fill="#92400e">Direction changes at x = 0: from increasing to decreasing → RELATIVE MAXIMUM!</text>
+        <!-- Graph sketch -->
+        <rect x="20" y="290" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="310" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">📊 Graph Shape:</text>
+        <text x="250" y="328" text-anchor="middle" font-size="10" fill="#92400e">Rises from -17 to 3 (at x=0), then falls to -12 (at x=3), then rises to 18 (at x=5)</text>
+        <text x="250" y="345" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Relative maximum at x = 0 (f(0) = 3 is highest in neighborhood)</text>
+        <!-- Answer highlight -->
+        <rect x="20" y="365" width="460" height="0" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    </svg>`,
+    
+    q50_cubic_graph: `<svg class="svg-graph" width="450" height="400" viewBox="0 0 450 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="440" height="390" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="225" y="25" text-anchor="middle" font-size="13" fill="#9f1239" font-weight="bold">السؤال 50: f(x) = 2x³ + x² - 4x - 2</text>
+        <!-- Grid -->
+        <g stroke="#e5e7eb" stroke-width="0.5">
+            ${Array.from({length: 19}, (_, i) => `<line x1="${50 + i*20}" y1="50" x2="${50 + i*20}" y2="350"/>`).join('')}
+            ${Array.from({length: 16}, (_, i) => `<line x1="50" y1="${50 + i*20}" x2="410" y2="${50 + i*20}"/>`).join('')}
+        </g>
+        <!-- Axes -->
+        <line x1="50" y1="230" x2="420" y2="230" stroke="#374151" stroke-width="2" marker-end="url(#arrow50)"/>
+        <line x1="200" y1="350" x2="200" y2="40" stroke="#374151" stroke-width="2" marker-end="url(#arrow50)"/>
+        <text x="425" y="235" font-size="11" fill="#374151" font-weight="bold">x</text>
+        <text x="190" y="35" font-size="11" fill="#374151" font-weight="bold">y</text>
+        <text x="205" y="245" font-size="10" fill="#374151">O</text>
+        <!-- Scale -->
+        <text x="220" y="245" font-size="9" fill="#6b7280">1</text>
+        <text x="240" y="245" font-size="9" fill="#6b7280">2</text>
+        <text x="180" y="245" font-size="9" fill="#6b7280">-1</text>
+        <text x="160" y="245" font-size="9" fill="#6b7280">-2</text>
+        <text x="195" y="210" font-size="9" fill="#6b7280">2</text>
+        <text x="195" y="190" font-size="9" fill="#6b7280">4</text>
+        <text x="195" y="250" font-size="9" fill="#6b7280">-2</text>
+        <text x="195" y="270" font-size="9" fill="#6b7280">-4</text>
+        <!-- f(x) = 2x³ + x² - 4x - 2 -->
+        <!-- f'(x) = 6x² + 2x - 4 = 0 → 3x² + x - 2 = 0 → x = (-1±√(1+24))/6 = (-1±5)/6 → x = 2/3 ≈ 0.67 or x = -1 -->
+        <!-- f(-1) = -2+1+4-2 = 1 (local max), f(2/3) ≈ 2(8/27)+4/9-8/3-2 ≈ 0.59+0.44-2.67-2 ≈ -3.63 (local min) -->
+        <path d="M 70 340 Q 100 320 130 290 Q 160 260 180 240 Q 190 230 200 220 Q 210 215 220 220 Q 240 240 260 280 Q 280 310 300 320 Q 320 325 340 310 Q 360 290 380 250 Q 400 200 410 150" fill="none" stroke="#ec4899" stroke-width="3"/>
+        <!-- Local maximum at x = -1 -->
+        <circle cx="180" cy="220" r="6" fill="#dc2626"/>
+        <text x="140" y="210" font-size="9" fill="#dc2626" font-weight="bold">Local Max</text>
+        <text x="140" y="223" font-size="9" fill="#dc2626">at x = -1, y = 1</text>
+        <!-- Local minimum at x ≈ 0.67 -->
+        <circle cx="240" cy="320" r="6" fill="#16a34a"/>
+        <text x="240" y="340" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="bold">Local Min</text>
+        <text x="240" y="352" text-anchor="middle" font-size="9" fill="#16a34a">at x ≈ 0.67, y ≈ -3.63</text>
+        <!-- Info -->
+        <rect x="20" y="360" width="400" height="25" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="225" y="377" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Relative max at x ≈ -1, Relative min at x ≈ 0.67</text>
+        <defs><marker id="arrow50" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`,
+    
+    q51_quartic_graph: `<svg class="svg-graph" width="450" height="400" viewBox="0 0 450 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="440" height="390" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="225" y="25" text-anchor="middle" font-size="13" fill="#065f46" font-weight="bold">السؤال 51: f(x) = x⁴ - 4x²</text>
+        <!-- Grid -->
+        <g stroke="#e5e7eb" stroke-width="0.5">
+            ${Array.from({length: 19}, (_, i) => `<line x1="${50 + i*20}" y1="50" x2="${50 + i*20}" y2="350"/>`).join('')}
+            ${Array.from({length: 16}, (_, i) => `<line x1="50" y1="${50 + i*20}" x2="410" y2="${50 + i*20}"/>`).join('')}
+        </g>
+        <!-- Axes -->
+        <line x1="50" y1="230" x2="420" y2="230" stroke="#374151" stroke-width="2" marker-end="url(#arrow51)"/>
+        <line x1="225" y1="350" x2="225" y2="40" stroke="#374151" stroke-width="2" marker-end="url(#arrow51)"/>
+        <text x="425" y="235" font-size="11" fill="#374151" font-weight="bold">x</text>
+        <text x="215" y="35" font-size="11" fill="#374151" font-weight="bold">y</text>
+        <text x="230" y="245" font-size="10" fill="#374151">O</text>
+        <!-- Scale -->
+        <text x="245" y="245" font-size="9" fill="#6b7280">1</text>
+        <text x="265" y="245" font-size="9" fill="#6b7280">2</text>
+        <text x="205" y="245" font-size="9" fill="#6b7280">-1</text>
+        <text x="185" y="245" font-size="9" fill="#6b7280">-2</text>
+        <text x="220" y="210" font-size="9" fill="#6b7280">1</text>
+        <text x="220" y="190" font-size="9" fill="#6b7280">2</text>
+        <text x="220" y="170" font-size="9" fill="#6b7280">3</text>
+        <text x="220" y="150" font-size="9" fill="#6b7280">4</text>
+        <text x="220" y="250" font-size="9" fill="#6b7280">-1</text>
+        <text x="220" y="270" font-size="9" fill="#6b7280">-2</text>
+        <text x="220" y="290" font-size="9" fill="#6b7280">-3</text>
+        <text x="220" y="310" font-size="9" fill="#6b7280">-4</text>
+        <!-- f(x) = x⁴ - 4x² = x²(x²-4) = x²(x-2)(x+2) -->
+        <!-- f'(x) = 4x³ - 8x = 4x(x²-2) = 0 → x = 0 or x = ±√2 ≈ ±1.41 -->
+        <!-- f(0) = 0 (local max), f(±√2) = 4 - 8 = -4 (local min) -->
+        <!-- W-shape (actually M-shape inverted): starts high, goes down to min at x=-1.41, up to max at x=0, down to min at x=1.41, up again -->
+        <path d="M 70 80 Q 100 120 130 180 Q 150 230 165 270 Q 180 290 200 290 Q 215 290 225 230 Q 235 290 250 290 Q 270 290 285 270 Q 300 230 320 180 Q 350 120 380 80" fill="none" stroke="#10b981" stroke-width="3"/>
+        <!-- Local maximum at x = 0 -->
+        <circle cx="225" cy="230" r="6" fill="#dc2626"/>
+        <text x="235" y="220" font-size="9" fill="#dc2626" font-weight="bold">Local Max at (0, 0)</text>
+        <!-- Local minima at x ≈ ±1.41 -->
+        <circle cx="165" cy="290" r="6" fill="#16a34a"/>
+        <text x="130" y="305" font-size="9" fill="#16a34a" font-weight="bold">Local Min</text>
+        <text x="130" y="318" font-size="9" fill="#16a34a">at x ≈ -1.41, y = -4</text>
+        <circle cx="285" cy="290" r="6" fill="#16a34a"/>
+        <text x="290" y="305" font-size="9" fill="#16a34a" font-weight="bold">Local Min</text>
+        <text x="290" y="318" font-size="9" fill="#16a34a">at x ≈ 1.41, y = -4</text>
+        <!-- X-intercepts -->
+        <circle cx="145" cy="230" r="4" fill="#f59e0b"/>
+        <text x="145" y="248" text-anchor="middle" font-size="8" fill="#f59e0b">-2</text>
+        <circle cx="225" cy="230" r="4" fill="#f59e0b"/>
+        <text x="225" y="248" text-anchor="middle" font-size="8" fill="#f59e0b">0</text>
+        <circle cx="305" cy="230" r="4" fill="#f59e0b"/>
+        <text x="305" y="248" text-anchor="middle" font-size="8" fill="#f59e0b">2</text>
+        <!-- Info -->
+        <rect x="20" y="355" width="400" height="30" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="225" y="375" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Relative max at x = 0, Relative min at x ≈ ±1.41</text>
+        <defs><marker id="arrow51" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`,
+    
+    extrema_concepts: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">📐 المفاهيم: القيم العظمى والصغرى النسبية</text>
+        <!-- Relative Maximum -->
+        <rect x="20" y="45" width="220" height="130" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="130" y="65" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Relative Maximum (عظمى نسبية)</text>
+        <!-- Hill shape -->
+        <path d="M 40 150 Q 80 100 130 80 Q 180 100 220 150" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+        <circle cx="130" cy="80" r="5" fill="#dc2626"/>
+        <text x="130" y="70" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">PEAK</text>
+        <text x="130" y="165" text-anchor="middle" font-size="9" fill="#5b21b6">Highest point in neighborhood</text>
+        <text x="130" y="178" text-anchor="middle" font-size="9" fill="#5b21b6">أعلى نقطة في الجوار</text>
+        <!-- Relative Minimum -->
+        <rect x="260" y="45" width="220" height="130" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="370" y="65" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Relative Minimum (صغرى نسبية)</text>
+        <!-- Valley shape -->
+        <path d="M 280 100 Q 320 150 370 170 Q 420 150 460 100" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+        <circle cx="370" cy="170" r="5" fill="#16a34a"/>
+        <text x="370" y="185" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="bold">VALLEY</text>
+        <text x="370" y="198" text-anchor="middle" font-size="9" fill="#5b21b6">Lowest point in neighborhood</text>
+        <text x="370" y="211" text-anchor="middle" font-size="9" fill="#5b21b6">أدنى نقطة في الجوار</text>
+        <!-- Key points -->
+        <rect x="20" y="190" width="460" height="100" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="210" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🔑 Key Points (نقاط مهمة):</text>
+        <text x="250" y="230" text-anchor="middle" font-size="10" fill="#92400e">• Relative ≠ Absolute (النسبية ≠ المطلقة)</text>
+        <text x="250" y="248" text-anchor="middle" font-size="10" fill="#92400e">• A function can have multiple relative extrema</text>
+        <text x="250" y="266" text-anchor="middle" font-size="10" fill="#92400e">• Turning points = where direction changes</text>
+        <text x="250" y="283" text-anchor="middle" font-size="10" fill="#92400e">• Degree n polynomial has at most n-1 turning points</text>
+        <!-- Examples -->
+        <rect x="20" y="300" width="460" height="85" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="320" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">📊 Examples from Questions:</text>
+        <text x="250" y="338" text-anchor="middle" font-size="10" fill="#92400e">Q48: f(x) = x³ - 4x² - 2x + 3 → max near x ≈ -0.23, min near x ≈ 2.90</text>
+        <text x="250" y="355" text-anchor="middle" font-size="10" fill="#92400e">Q50: f(x) = 2x³ + x² - 4x - 2 → max at x = -1, min at x ≈ 0.67</text>
+        <text x="250" y="372" text-anchor="middle" font-size="10" fill="#92400e">Q51: f(x) = x⁴ - 4x² → max at x = 0, min at x ≈ ±1.41</text>
+    </svg>`,
+    
+    table_analysis: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">📊 تحليل الجداول لإيجاد القيم القصوى</text>
+        <!-- Example table -->
+        <rect x="20" y="45" width="460" height="100" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Example Table: f(x) = x³ - 4x² - 2x + 3</text>
+        <text x="100" y="85" text-anchor="middle" font-size="10" fill="#991b1b">x: -2, -1, 0, 1, 2, 3, 4, 5</text>
+        <text x="100" y="103" text-anchor="middle" font-size="10" fill="#991b1b">f(x): -17, 0, 3, -2, -9, -12, -4, 18</text>
+        <text x="100" y="121" text-anchor="middle" font-size="10" fill="#991b1b">Direction: ↑, ↑, ↓, ↓, ↓, ↑, ↑</text>
+        <text x="100" y="138" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">Change at x=0: ↑ to ↓ → MAX!</text>
+        <text x="350" y="138" text-anchor="middle" font-size="10" fill="#16a34a" font-weight="bold">Change at x=3: ↓ to ↑ → MIN!</text>
+        <!-- Rules -->
+        <rect x="20" y="155" width="460" height="100" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="175" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">🔑 Rules for Table Analysis:</text>
+        <text x="250" y="195" text-anchor="middle" font-size="10" fill="#991b1b">1. Look for where f(x) stops increasing and starts decreasing → Relative MAX</text>
+        <text x="250" y="213" text-anchor="middle" font-size="10" fill="#991b1b">2. Look for where f(x) stops decreasing and starts increasing → Relative MIN</text>
+        <text x="250" y="231" text-anchor="middle" font-size="10" fill="#991b1b">3. The x-value where direction changes is where the extremum occurs</text>
+        <text x="250" y="248" text-anchor="middle" font-size="10" fill="#991b1b">4. Compare with neighboring values to confirm</text>
+        <!-- Visual -->
+        <rect x="20" y="265" width="460" height="100" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="285" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">📈 Visual Pattern:</text>
+        <text x="250" y="305" text-anchor="middle" font-size="10" fill="#92400e">Increasing → Peak (MAX) → Decreasing → Valley (MIN) → Increasing</text>
+        <text x="250" y="325" text-anchor="middle" font-size="10" fill="#92400e">تزايد → قمة (عظمى) → تناقص → قاع (صغرى) → تزايد</text>
+        <text x="250" y="345" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">For Q49: f(0)=3 is higher than f(-1)=0 and f(1)=-2 → MAX at x=0</text>
+        <text x="250" y="362" text-anchor="middle" font-size="9" fill="#92400e">f(3)=-12 is lower than f(2)=-9 and f(4)=-4 → MIN at x=3 (not in options)</text>
+    </svg>`,
+    
+    finding_extrema_methods: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">🔍 طرق إيجاد القيم القصوى - Methods</text>
+        <!-- Method 1: Graph -->
+        <rect x="20" y="45" width="460" height="80" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Method 1: From Graph (من الرسم البياني)</text>
+        <text x="250" y="83" text-anchor="middle" font-size="10" fill="#065f46">• Look for peaks (local maxima) and valleys (local minima)</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#065f46">• Read x-coordinate of highest/lowest points in neighborhoods</text>
+        <text x="250" y="117" text-anchor="middle" font-size="10" fill="#065f46">• Peaks = relative max, Valleys = relative min</text>
+        <!-- Method 2: Table -->
+        <rect x="20" y="135" width="460" height="80" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="155" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Method 2: From Table (من جدول القيم)</text>
+        <text x="250" y="173" text-anchor="middle" font-size="10" fill="#065f46">• Look for sign changes in differences (increasing → decreasing)</text>
+        <text x="250" y="190" text-anchor="middle" font-size="10" fill="#065f46">• Find x where f(x) is greater/less than both neighbors</text>
+        <text x="250" y="207" text-anchor="middle" font-size="10" fill="#065f46">• Direction change indicates extremum</text>
+        <!-- Method 3: Calculus -->
+        <rect x="20" y="225" width="460" height="80" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="245" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Method 3: Using Calculus (باستخدام التفاضل)</text>
+        <text x="250" y="263" text-anchor="middle" font-size="10" fill="#065f46">• Find f'(x) and set equal to 0 (critical points)</text>
+        <text x="250" y="280" text-anchor="middle" font-size="10" fill="#065f46">• Use f''(x) test: f''&lt;0 → max, f''&gt;0 → min</text>
+        <text x="250" y="297" text-anchor="middle" font-size="10" fill="#065f46">• Or use first derivative test (sign change of f')</text>
+        <!-- Method 4: Estimation -->
+        <rect x="20" y="315" width="460" height="70" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="250" y="335" text-anchor="middle" font-size="11" fill="#065f46" font-weight="bold">Method 4: Estimation (التقدير)</text>
+        <text x="250" y="353" text-anchor="middle" font-size="10" fill="#065f46">• Use graphing calculator to find approximate locations</text>
+        <text x="250" y="370" text-anchor="middle" font-size="10" fill="#065f46">• Round to nearest reasonable value (like 0.7, -1, etc.)</text>
+        <text x="250" y="383" text-anchor="middle" font-size="9" fill="#065f46" font-weight="bold">For Grade 12: Focus on Methods 1, 2, and 4 (graph, table, estimation)</text>
+    </svg>`,
+    
+    quartic_vs_cubic: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📊 مقارنة: تكعيبي vs رباعي الدرجة</text>
+        <!-- Cubic -->
+        <rect x="20" y="45" width="220" height="160" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="130" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Cubic (درجة 3)</text>
+        <text x="130" y="82" text-anchor="middle" font-size="10" fill="#92400e">f(x) = x³ - 4x² - 2x + 3</text>
+        <!-- S-shape cubic -->
+        <path d="M 40 180 Q 70 150 100 120 Q 120 100 130 100 Q 140 100 160 130 Q 180 170 200 190 Q 220 200 230 190" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <circle cx="100" cy="120" r="4" fill="#dc2626"/>
+        <text x="100" y="110" text-anchor="middle" font-size="8" fill="#dc2626">Max</text>
+        <circle cx="200" cy="190" r="4" fill="#16a34a"/>
+        <text x="200" y="205" text-anchor="middle" font-size="8" fill="#16a34a">Min</text>
+        <text x="130" y="220" text-anchor="middle" font-size="9" fill="#92400e">At most 2 turning points</text>
+        <text x="130" y="235" text-anchor="middle" font-size="9" fill="#92400e">1 max + 1 min (or none)</text>
+        <!-- Quartic -->
+        <rect x="260" y="45" width="220" height="160" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="370" y="65" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Quartic (درجة 4)</text>
+        <text x="370" y="82" text-anchor="middle" font-size="10" fill="#92400e">f(x) = x⁴ - 4x²</text>
+        <!-- W-shape quartic -->
+        <path d="M 280 100 Q 310 130 340 170 Q 360 190 370 190 Q 380 190 400 170 Q 430 130 460 100" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+        <circle cx="340" cy="170" r="4" fill="#16a34a"/>
+        <text x="340" y="185" text-anchor="middle" font-size="8" fill="#16a34a">Min</text>
+        <circle cx="370" cy="190" r="4" fill="#dc2626"/>
+        <text x="370" y="205" text-anchor="middle" font-size="8" fill="#dc2626">Max</text>
+        <circle cx="400" cy="170" r="4" fill="#16a34a"/>
+        <text x="400" y="185" text-anchor="middle" font-size="8" fill="#16a34a">Min</text>
+        <text x="370" y="220" text-anchor="middle" font-size="9" fill="#92400e">At most 3 turning points</text>
+        <text x="370" y="235" text-anchor="middle" font-size="9" fill="#92400e">W or M shape possible</text>
+        <!-- Comparison -->
+        <rect x="20" y="220" width="460" height="140" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="240" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">🔑 Key Differences:</text>
+        <text x="250" y="260" text-anchor="middle" font-size="10" fill="#92400e">• Cubic (odd degree): ends go in OPPOSITE directions</text>
+        <text x="250" y="278" text-anchor="middle" font-size="10" fill="#92400e">• Quartic (even degree): ends go in SAME direction</text>
+        <text x="250" y="296" text-anchor="middle" font-size="10" fill="#92400e">• Cubic: 0 or 2 turning points (even number)</text>
+        <text x="250" y="314" text-anchor="middle" font-size="10" fill="#92400e">• Quartic: 1 or 3 turning points (odd number)</text>
+        <text x="250" y="332" text-anchor="middle" font-size="10" fill="#92400e">• Both can have relative max AND relative min</text>
+        <text x="250" y="350" text-anchor="middle" font-size="10" fill="#92400e" font-weight="bold">Q51 example: x⁴ - 4x² has 1 max (at x=0) and 2 min (at x≈±1.41)</text>
+    </svg>`,
+    
+    derivative_concept: `<svg class="svg-graph" width="500" height="360" viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="350" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">📐 المشتقة والقيم القصوى (للإثراء)</text>
+        <!-- f(x) curve -->
+        <rect x="20" y="45" width="460" height="130" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">f(x) = x³ - 4x² - 2x + 3</text>
+        <path d="M 40 150 Q 80 120 120 100 Q 160 90 180 100 Q 220 130 260 160 Q 300 180 340 170 Q 380 150 420 100 Q 450 70 470 50" fill="none" stroke="#ec4899" stroke-width="2.5"/>
+        <circle cx="120" cy="100" r="5" fill="#dc2626"/>
+        <text x="120" y="90" text-anchor="middle" font-size="9" fill="#dc2626" font-weight="bold">Max</text>
+        <circle cx="340" cy="170" r="5" fill="#16a34a"/>
+        <text x="340" y="185" text-anchor="middle" font-size="9" fill="#16a34a" font-weight="bold">Min</text>
+        <!-- f'(x) explanation -->
+        <rect x="20" y="185" width="460" height="80" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="250" y="205" text-anchor="middle" font-size="11" fill="#9f1239" font-weight="bold">f'(x) = 3x² - 8x - 2 (المشتقة)</text>
+        <text x="250" y="225" text-anchor="middle" font-size="10" fill="#9f1239">At extrema: f'(x) = 0 (slope = 0, horizontal tangent)</text>
+        <text x="250" y="243" text-anchor="middle" font-size="10" fill="#9f1239">3x² - 8x - 2 = 0 → x ≈ -0.23 or x ≈ 2.90</text>
+        <text x="250" y="260" text-anchor="middle" font-size="10" fill="#9f1239">These match the graph's max and min locations!</text>
+        <!-- Second derivative test -->
+        <rect x="20" y="275" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="295" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">f''(x) = 6x - 8 (المشتقة الثانية)</text>
+        <text x="250" y="313" text-anchor="middle" font-size="10" fill="#92400e">At x ≈ -0.23: f'' ≈ -9.4 &lt; 0 → CONCAVE DOWN → MAXIMUM ✓</text>
+        <text x="250" y="330" text-anchor="middle" font-size="10" fill="#92400e">At x ≈ 2.90: f'' ≈ 9.4 &gt; 0 → CONCAVE UP → MINIMUM ✓</text>
+        <text x="250" y="345" text-anchor="middle" font-size="9" fill="#92400e" font-weight="bold">Note: For Grade 12, focus on graph/table methods. Calculus is for advanced study.</text>
+    </svg>`,
+    
+    practice_extrema: `<svg class="svg-graph" width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="390" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📝 أمثلة تدريبية - Practice Examples</text>
+        <!-- Example 1 -->
+        <rect x="20" y="45" width="460" height="80" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Example 1: f(x) = x³ - 3x</text>
+        <text x="250" y="83" text-anchor="middle" font-size="10" fill="#1e40af">f'(x) = 3x² - 3 = 0 → x = ±1</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#1e40af">f(-1) = 2 (local max), f(1) = -2 (local min)</text>
+        <text x="250" y="117" text-anchor="middle" font-size="10" fill="#1e40af" font-weight="bold">Relative max at x = -1, Relative min at x = 1</text>
+        <!-- Example 2 -->
+        <rect x="20" y="135" width="460" height="80" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="155" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Example 2: f(x) = x⁴ - 2x²</text>
+        <text x="250" y="173" text-anchor="middle" font-size="10" fill="#1e40af">f'(x) = 4x³ - 4x = 4x(x²-1) = 0 → x = 0, ±1</text>
+        <text x="250" y="190" text-anchor="middle" font-size="10" fill="#1e40af">f(0) = 0 (local max), f(±1) = -1 (local min)</text>
+        <text x="250" y="207" text-anchor="middle" font-size="10" fill="#1e40af" font-weight="bold">Relative max at x = 0, Relative min at x = ±1</text>
+        <!-- Example 3 -->
+        <rect x="20" y="225" width="460" height="80" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="250" y="245" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="bold">Example 3: f(x) = -x³ + 6x² - 9x + 1</text>
+        <text x="250" y="263" text-anchor="middle" font-size="10" fill="#1e40af">f'(x) = -3x² + 12x - 9 = -3(x²-4x+3) = -3(x-1)(x-3) = 0</text>
+        <text x="250" y="280" text-anchor="middle" font-size="10" fill="#1e40af">x = 1 or x = 3. f(1) = -3 (min), f(3) = 1 (max)</text>
+        <text x="250" y="297" text-anchor="middle" font-size="10" fill="#1e40af" font-weight="bold">Relative min at x = 1, Relative max at x = 3</text>
+        <!-- Summary -->
+        <rect x="20" y="315" width="460" height="70" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="250" y="335" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">💡 Summary:</text>
+        <text x="250" y="353" text-anchor="middle" font-size="10" fill="#92400e">• Cubic (degree 3): typically 1 max + 1 min (2 turning points)</text>
+        <text x="250" y="370" text-anchor="middle" font-size="10" fill="#92400e">• Quartic (degree 4): can have 1 max + 2 min OR 2 max + 1 min (3 turning points)</text>
+        <text x="250" y="383" text-anchor="middle" font-size="9" fill="#92400e" font-weight="bold">Always verify by checking values on both sides of critical points!</text>
+    </svg>`,
+    
+    common_mistakes_extrema: `<svg class="svg-graph" width="500" height="380" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="490" height="370" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">⚠️ أخطاء شائعة - Common Mistakes</text>
+        <!-- Mistake 1 -->
+        <rect x="20" y="45" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="65" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 1: Confusing relative with absolute extrema</text>
+        <text x="250" y="83" text-anchor="middle" font-size="10" fill="#991b1b">Relative max ≠ highest point overall (just highest in neighborhood)</text>
+        <text x="250" y="100" text-anchor="middle" font-size="10" fill="#991b1b">القيمة العظمى النسبية ≠ أعلى نقطة في الدالة كلها</text>
+        <text x="250" y="113" text-anchor="middle" font-size="9" fill="#991b1b">A cubic has NO absolute max/min (goes to ±∞)</text>
+        <!-- Mistake 2 -->
+        <rect x="20" y="125" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="145" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 2: Missing extrema in tables</text>
+        <text x="250" y="163" text-anchor="middle" font-size="10" fill="#991b1b">If table skips the extremum x-value, you might miss it!</text>
+        <text x="250" y="180" text-anchor="middle" font-size="10" fill="#991b1b">Look for direction changes, not just highest/lowest values</text>
+        <text x="250" y="193" text-anchor="middle" font-size="9" fill="#991b1b">ابحث عن تغير الاتجاه، ليس فقط أعلى/أدنى قيمة</text>
+        <!-- Mistake 3 -->
+        <rect x="20" y="205" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="225" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 3: Counting endpoints as relative extrema</text>
+        <text x="250" y="243" text-anchor="middle" font-size="10" fill="#991b1b">Relative extrema occur at INTERIOR points, not endpoints</text>
+        <text x="250" y="260" text-anchor="middle" font-size="10" fill="#991b1b">القيم القصوى النسبية عند نقاط داخلية، ليس عند الأطراف</text>
+        <text x="250" y="273" text-anchor="middle" font-size="9" fill="#991b1b">Need points on BOTH sides to compare</text>
+        <!-- Mistake 4 -->
+        <rect x="20" y="285" width="460" height="70" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="250" y="305" text-anchor="middle" font-size="11" fill="#991b1b" font-weight="bold">Mistake 4: Assuming all polynomials have extrema</text>
+        <text x="250" y="323" text-anchor="middle" font-size="10" fill="#991b1b">f(x) = x³ has NO relative extrema (always increasing)</text>
+        <text x="250" y="340" text-anchor="middle" font-size="10" fill="#991b1b">f(x) = x has NO relative extrema (straight line)</text>
+        <text x="250" y="353" text-anchor="middle" font-size="9" fill="#991b1b">Only polynomials with turning points have relative extrema</text>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: من الرسم البياني (مثل Q48) (Q1-Q5)', en: '🔹 Section 1: From Graph (like Q48) (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 1 (مثل السؤال 48):</strong> يبين الشكل التمثيل البياني للدالة <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>. قدر إحداثيات x التي تحدث عندها القيم العظمى والصغرى النسبية.', en: '<strong>Question 1 (like Q48):</strong> The figure shows the graph of <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>. Estimate the x-coordinates where relative max and min occur.' },
+                    svg: svgGraphs.q48_cubic_graph,
+                    options: [
+                        { ar: 'عظمى نسبية قرب x = 3، وصغرى نسبية قرب x = 0', en: 'Relative max near x = 3, relative min near x = 0' },
+                        { ar: 'عظمى نسبية قرب x = -1، وصغرى نسبية قرب x = 4', en: 'Relative max near x = -1, relative min near x = 4' },
+                        { ar: 'عظمى نسبية قرب x = 0، وصغرى نسبية قرب x = 3 فقط', en: 'Relative max near x = 0, relative min near x = 3 only' },
+                        { ar: 'عظمى نسبية قرب x = -1، وصغرى نسبية قرب x = 3', en: 'Relative max near x = -1, relative min near x = 3' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'من الرسم: القيمة العظمى النسبية عند x ≈ -0.23 (قرب 0 أو -1)، والقيمة الصغرى النسبية عند x ≈ 2.90 (قرب 3). الإجابة الأقرب: عظمى قرب x = -1 (أو 0) وصغرى قرب x = 3 (أو 4)', en: 'From graph: relative max near x ≈ -0.23, relative min near x ≈ 2.90. Closest: max near x = -1 or 0, min near x = 3 or 4' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 2:</strong> للدالة <span class="math-display">f(x) = x³ - 3x</span>، ما إحداثيات x للقيم العظمى والصغرى النسبية؟', en: '<strong>Question 2:</strong> For <span class="math-display">f(x) = x³ - 3x</span>, what are the x-coordinates of relative max and min?' },
+                    options: [
+                        { ar: 'عظمى عند x = -1، صغرى عند x = 1', en: 'Max at x = -1, min at x = 1' },
+                        { ar: 'عظمى عند x = 1، صغرى عند x = -1', en: 'Max at x = 1, min at x = -1' },
+                        { ar: 'عظمى عند x = 0، صغرى عند x = 3', en: 'Max at x = 0, min at x = 3' },
+                        { ar: 'لا توجد قيم قصوى نسبية', en: 'No relative extrema' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 3x² - 3 = 0 → x = ±1. f(-1) = 2 (عظمى)، f(1) = -2 (صغرى)', en: 'f\'(x) = 3x² - 3 = 0 → x = ±1. f(-1) = 2 (max), f(1) = -2 (min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 3:</strong> للدالة <span class="math-display">f(x) = -x³ + 3x²</span>، ما إحداثيات x للقيم العظمى والصغرى النسبية؟', en: '<strong>Question 3:</strong> For <span class="math-display">f(x) = -x³ + 3x²</span>, what are the x-coordinates of relative max and min?' },
+                    options: [
+                        { ar: 'عظمى عند x = 2، صغرى عند x = 0', en: 'Max at x = 2, min at x = 0' },
+                        { ar: 'عظمى عند x = 0، صغرى عند x = 2', en: 'Max at x = 0, min at x = 2' },
+                        { ar: 'عظمى عند x = 1، صغرى عند x = -1', en: 'Max at x = 1, min at x = -1' },
+                        { ar: 'لا توجد قيم قصوى نسبية', en: 'No relative extrema' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = -3x² + 6x = -3x(x-2) = 0 → x = 0 أو x = 2. f(0) = 0 (صغرى)، f(2) = 4 (عظمى)', en: 'f\'(x) = -3x(x-2) = 0 → x = 0 or x = 2. f(0) = 0 (min), f(2) = 4 (max)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 4:</strong> للدالة <span class="math-display">f(x) = x³</span>، كم قيمة عظمى/صغرى نسبية لها؟', en: '<strong>Question 4:</strong> For <span class="math-display">f(x) = x³</span>, how many relative max/min values does it have?' },
+                    options: [
+                        { ar: 'لا توجد قيم قصوى نسبية', en: 'No relative extrema' },
+                        { ar: 'قيمة عظمى واحدة وصغرى واحدة', en: 'One max and one min' },
+                        { ar: 'قيمة عظمى واحدة فقط', en: 'One max only' },
+                        { ar: 'قيمة صغرى واحدة فقط', en: 'One min only' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f(x) = x³ متزايدة دائماً (f\'(x) = 3x² ≥ 0). لا توجد نقاط انعطاف → لا قيم قصوى نسبية', en: 'f(x) = x³ is always increasing (f\'(x) = 3x² ≥ 0). No turning points → no relative extrema' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 5:</strong> للدالة <span class="math-display">f(x) = 2x³ + x² - 4x - 2</span>، ما إحداثيات x التقريبية للقيم العظمى والصغرى النسبية؟', en: '<strong>Question 5:</strong> For <span class="math-display">f(x) = 2x³ + x² - 4x - 2</span>, what are the approximate x-coordinates of relative max and min?' },
+                    svg: svgGraphs.q50_cubic_graph,
+                    options: [
+                        { ar: 'عظمى عند x ≈ 0.7، وصغرى عند x ≈ -1', en: 'Max at x ≈ 0.7, min at x ≈ -1' },
+                        { ar: 'عظمى عند x ≈ -1، وصغرى عند x ≈ 0.7', en: 'Max at x ≈ -1, min at x ≈ 0.7' },
+                        { ar: 'عظمى عند x ≈ 0، وصغرى عند x ≈ 1', en: 'Max at x ≈ 0, min at x ≈ 1' },
+                        { ar: 'عظمى عند x ≈ -1، وصغرى عند x ≈ 2', en: 'Max at x ≈ -1, min at x ≈ 2' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'f\'(x) = 6x² + 2x - 4 = 0 → 3x² + x - 2 = 0 → x = (-1±5)/6 → x = 2/3 ≈ 0.67 أو x = -1. f(-1) = 1 (عظمى)، f(0.67) ≈ -3.63 (صغرى)', en: 'f\'(x) = 0 → x ≈ 0.67 or x = -1. f(-1) = 1 (max), f(0.67) ≈ -3.63 (min)' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 القسم 2: من جدول القيم (مثل Q49) (Q6-Q10)', en: '🔹 Section 2: From Table of Values (like Q49) (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 6 (مثل السؤال 49):</strong> يبين الجدول قيماً للدالة <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>. عند أي قيمة لـ x في الجدول توجد قيمة عظمى نسبية؟<br><br><table border="1" style="margin:10px auto;"><tr><th>x</th><td>-2</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>f(x)</th><td>-17</td><td>0</td><td>3</td><td>-2</td><td>-9</td><td>-12</td><td>-4</td><td>18</td></tr></table>', en: '<strong>Question 6 (like Q49):</strong> The table shows values of <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>. At which x value in the table does a relative maximum occur?<br><br><table border="1" style="margin:10px auto;"><tr><th>x</th><td>-2</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>f(x)</th><td>-17</td><td>0</td><td>3</td><td>-2</td><td>-9</td><td>-12</td><td>-4</td><td>18</td></tr></table>' },
+                    svg: svgGraphs.q49_table,
+                    options: [
+                        { ar: '<span class="math-display">x = 3</span>', en: '<span class="math-display">x = 3</span>' },
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: '<span class="math-display">x = -1</span>', en: '<span class="math-display">x = -1</span>' },
+                        { ar: '<span class="math-display">x = 5</span>', en: '<span class="math-display">x = 5</span>' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'f(-1)=0, f(0)=3, f(1)=-2. القيمة تزيد من 0 إلى 3 ثم تنقص إلى -2. إذن x = 0 قيمة عظمى نسبية', en: 'f(-1)=0, f(0)=3, f(1)=-2. Value increases from 0 to 3 then decreases to -2. So x = 0 is relative max' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 7:</strong> من الجدول في السؤال 6، عند أي قيمة لـ x توجد قيمة صغرى نسبية؟', en: '<strong>Question 7:</strong> From the table in Q6, at which x value does a relative minimum occur?' },
+                    options: [
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: '<span class="math-display">x = 3</span>', en: '<span class="math-display">x = 3</span>' },
+                        { ar: '<span class="math-display">x = 2</span>', en: '<span class="math-display">x = 2</span>' },
+                        { ar: '<span class="math-display">x = 4</span>', en: '<span class="math-display">x = 4</span>' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'f(2)=-9, f(3)=-12, f(4)=-4. القيمة تنقص من -9 إلى -12 ثم تزيد إلى -4. إذن x = 3 قيمة صغرى نسبية', en: 'f(2)=-9, f(3)=-12, f(4)=-4. Value decreases from -9 to -12 then increases to -4. So x = 3 is relative min' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 8:</strong> للدالة ذات الجدول: f(-3)=10, f(-2)=5, f(-1)=2, f(0)=1, f(1)=2, f(2)=5, f(3)=10. أين القيمة الصغرى النسبية؟', en: '<strong>Question 8:</strong> For function with table: f(-3)=10, f(-2)=5, f(-1)=2, f(0)=1, f(1)=2, f(2)=5, f(3)=10. Where is the relative minimum?' },
+                    options: [
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: '<span class="math-display">x = -3</span>', en: '<span class="math-display">x = -3</span>' },
+                        { ar: '<span class="math-display">x = 3</span>', en: '<span class="math-display">x = 3</span>' },
+                        { ar: 'لا توجد قيمة صغرى نسبية', en: 'No relative minimum' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'القيم تنقص من 10 إلى 1 (عند x=0) ثم تزيد من 1 إلى 10. إذن x = 0 قيمة صغرى نسبية (f(0) = 1)', en: 'Values decrease from 10 to 1 (at x=0) then increase from 1 to 10. So x = 0 is relative min (f(0) = 1)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 9:</strong> للدالة ذات الجدول: f(0)=5, f(1)=8, f(2)=10, f(3)=9, f(4)=6, f(5)=2. أين القيمة العظمى النسبية؟', en: '<strong>Question 9:</strong> For function with table: f(0)=5, f(1)=8, f(2)=10, f(3)=9, f(4)=6, f(5)=2. Where is the relative maximum?' },
+                    options: [
+                        { ar: '<span class="math-display">x = 2</span>', en: '<span class="math-display">x = 2</span>' },
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: '<span class="math-display">x = 5</span>', en: '<span class="math-display">x = 5</span>' },
+                        { ar: 'لا توجد قيمة عظمى نسبية', en: 'No relative maximum' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'القيم تزيد من 5 إلى 10 (عند x=2) ثم تنقص من 10 إلى 2. إذن x = 2 قيمة عظمى نسبية (f(2) = 10)', en: 'Values increase from 5 to 10 (at x=2) then decrease from 10 to 2. So x = 2 is relative max (f(2) = 10)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 10:</strong> ما المبدأ المستخدم لتحديد القيم القصوى من جدول القيم؟', en: '<strong>Question 10:</strong> What principle is used to determine extrema from a table of values?' },
+                    svg: svgGraphs.table_analysis,
+                    options: [
+                        { ar: 'البحث عن تغير اتجاه الدالة (من تزايد إلى تناقص أو العكس)', en: 'Looking for direction change (increasing to decreasing or vice versa)' },
+                        { ar: 'إيجاد أكبر وأصغر قيمة في الجدول', en: 'Finding largest and smallest values in table' },
+                        { ar: 'حساب متوسط القيم', en: 'Calculating average of values' },
+                        { ar: 'لا يمكن تحديد القيم القصوى من الجدول', en: 'Cannot determine extrema from table' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'نبحث عن نقطة حيث تتغير الدالة من التزايد إلى التناقص (عظمى) أو من التناقص إلى التزايد (صغرى)', en: 'We look for point where function changes from increasing to decreasing (max) or decreasing to increasing (min)' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: تقدير القيم القصوى (مثل Q50) (Q11-Q15)', en: '🔹 Section 3: Estimating Extrema (like Q50) (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 11 (مثل السؤال 50):</strong> قدر إحداثيات x التي تحدث عندها القيم العظمى والصغرى النسبية للدالة <span class="math-display">f(x) = 2x³ + x² - 4x - 2</span>.', en: '<strong>Question 11 (like Q50):</strong> Estimate the x-coordinates where relative max and min occur for <span class="math-display">f(x) = 2x³ + x² - 4x - 2</span>.' },
+                    svg: svgGraphs.q50_cubic_graph,
+                    options: [
+                        { ar: 'عظمى نسبية عند x ≈ 0.7، وصغرى نسبية عند x ≈ -1', en: 'Relative max at x ≈ 0.7, relative min at x ≈ -1' },
+                        { ar: 'عظمى نسبية عند x ≈ -1، وصغرى نسبية عند x ≈ 0.7', en: 'Relative max at x ≈ -1, relative min at x ≈ 0.7' },
+                        { ar: 'عظمى نسبية عند x ≈ 0، وصغرى نسبية عند x ≈ 2', en: 'Relative max at x ≈ 0, relative min at x ≈ 2' },
+                        { ar: 'عظمى نسبية عند x ≈ -1، وصغرى نسبية عند x ≈ 1', en: 'Relative max at x ≈ -1, relative min at x ≈ 1' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'f\'(x) = 6x² + 2x - 4 = 0 → x = -1 أو x = 2/3 ≈ 0.67. f(-1) = 1 (عظمى)، f(0.67) ≈ -3.63 (صغرى)', en: 'f\'(x) = 0 → x = -1 or x ≈ 0.67. f(-1) = 1 (max), f(0.67) ≈ -3.63 (min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 12:</strong> قدر إحداثيات x للقيم العظمى والصغرى النسبية للدالة <span class="math-display">f(x) = x³ - 6x² + 9x + 1</span>.', en: '<strong>Question 12:</strong> Estimate the x-coordinates of relative max and min for <span class="math-display">f(x) = x³ - 6x² + 9x + 1</span>.' },
+                    options: [
+                        { ar: 'عظمى عند x = 1، صغرى عند x = 3', en: 'Max at x = 1, min at x = 3' },
+                        { ar: 'عظمى عند x = 3، صغرى عند x = 1', en: 'Max at x = 3, min at x = 1' },
+                        { ar: 'عظمى عند x = 0، صغرى عند x = 6', en: 'Max at x = 0, min at x = 6' },
+                        { ar: 'عظمى عند x = 2، صغرى عند x = 4', en: 'Max at x = 2, min at x = 4' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 3x² - 12x + 9 = 3(x-1)(x-3) = 0 → x = 1 أو x = 3. f(1) = 5 (عظمى)، f(3) = 1 (صغرى)', en: 'f\'(x) = 3(x-1)(x-3) = 0 → x = 1 or x = 3. f(1) = 5 (max), f(3) = 1 (min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 13:</strong> للدالة <span class="math-display">f(x) = -x³ + 3x + 2</span>، ما إحداثيات x للقيم العظمى والصغرى النسبية؟', en: '<strong>Question 13:</strong> For <span class="math-display">f(x) = -x³ + 3x + 2</span>, what are the x-coordinates of relative max and min?' },
+                    options: [
+                        { ar: 'عظمى عند x = 1، صغرى عند x = -1', en: 'Max at x = 1, min at x = -1' },
+                        { ar: 'عظمى عند x = -1، صغرى عند x = 1', en: 'Max at x = -1, min at x = 1' },
+                        { ar: 'عظمى عند x = 0، صغرى عند x = 3', en: 'Max at x = 0, min at x = 3' },
+                        { ar: 'لا توجد قيم قصوى نسبية', en: 'No relative extrema' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = -3x² + 3 = 0 → x² = 1 → x = ±1. f(1) = 4 (عظمى لأن a سالب)، f(-1) = 0 (صغرى)', en: 'f\'(x) = -3x² + 3 = 0 → x = ±1. f(1) = 4 (max since a<0), f(-1) = 0 (min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 14:</strong> للدالة <span class="math-display">f(x) = x³ + 3x² - 9x</span>، ما إحداثيات x للقيم العظمى والصغرى النسبية؟', en: '<strong>Question 14:</strong> For <span class="math-display">f(x) = x³ + 3x² - 9x</span>, what are the x-coordinates of relative max and min?' },
+                    options: [
+                        { ar: 'عظمى عند x = -3، صغرى عند x = 1', en: 'Max at x = -3, min at x = 1' },
+                        { ar: 'عظمى عند x = 1، صغرى عند x = -3', en: 'Max at x = 1, min at x = -3' },
+                        { ar: 'عظمى عند x = 0، صغرى عند x = 3', en: 'Max at x = 0, min at x = 3' },
+                        { ar: 'عظمى عند x = 3، صغرى عند x = -1', en: 'Max at x = 3, min at x = -1' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 3x² + 6x - 9 = 3(x+3)(x-1) = 0 → x = -3 أو x = 1. f(-3) = 27 (عظمى)، f(1) = -5 (صغرى)', en: 'f\'(x) = 3(x+3)(x-1) = 0 → x = -3 or x = 1. f(-3) = 27 (max), f(1) = -5 (min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 15:</strong> للدالة <span class="math-display">f(x) = 4x³ - 3x⁴</span>، ما إحداثيات x للقيم العظمى والصغرى النسبية؟', en: '<strong>Question 15:</strong> For <span class="math-display">f(x) = 4x³ - 3x⁴</span>, what are the x-coordinates of relative max and min?' },
+                    options: [
+                        { ar: 'عظمى عند x = 1، صغرى عند x = 0', en: 'Max at x = 1, min at x = 0' },
+                        { ar: 'عظمى عند x = 0، صغرى عند x = 1', en: 'Max at x = 0, min at x = 1' },
+                        { ar: 'عظمى عند x = 1 فقط', en: 'Max at x = 1 only' },
+                        { ar: 'لا توجد قيم قصوى نسبية', en: 'No relative extrema' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 12x² - 12x³ = 12x²(1-x) = 0 → x = 0 أو x = 1. f(0) = 0 (نقطة سرج/صغرى)، f(1) = 1 (عظمى)', en: 'f\'(x) = 12x²(1-x) = 0 → x = 0 or x = 1. f(0) = 0 (inflection/min), f(1) = 1 (max)' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 القسم 4: كثيرات الحدود من الدرجة الرابعة (مثل Q51) (Q16-Q20)', en: '🔹 Section 4: Quartic Polynomials (like Q51) (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 16 (مثل السؤال 51):</strong> يبين الشكل التمثيل البياني للدالة <span class="math-display">f(x) = x⁴ - 4x²</span>. أي العبارات صحيحة؟', en: '<strong>Question 16 (like Q51):</strong> The figure shows the graph of <span class="math-display">f(x) = x⁴ - 4x²</span>. Which statement is correct?' },
+                    svg: svgGraphs.q51_quartic_graph,
+                    options: [
+                        { ar: 'قيمة صغرى نسبية عند x = 0، وقيمتان عظميان نسبيتان قرب x = -1.4 و x = 1.4', en: 'Relative min at x = 0, and two relative max near x = -1.4 and x = 1.4' },
+                        { ar: 'قيمة عظمى نسبية عند x = 0 فقط', en: 'Relative max at x = 0 only' },
+                        { ar: 'قيمتان عظميان نسبيتان عند x = -2 و x = 2', en: 'Two relative max at x = -2 and x = 2' },
+                        { ar: 'قيمة عظمى نسبية عند x = 0، وقيمتان صغريان نسبيتان قرب x = -1.4 و x = 1.4', en: 'Relative max at x = 0, and two relative min near x = -1.4 and x = 1.4' }
+                    ],
+                    correct: 3,
+                    answer: { ar: 'f(x) = x⁴ - 4x² = x²(x²-4). f\'(x) = 4x³ - 8x = 4x(x²-2) = 0 → x = 0 أو x = ±√2 ≈ ±1.41. f(0) = 0 (عظمى نسبية)، f(±1.41) = -4 (صغرى نسبية)', en: 'f\'(x) = 4x(x²-2) = 0 → x = 0 or x = ±√2 ≈ ±1.41. f(0) = 0 (relative max), f(±1.41) = -4 (relative min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 17:</strong> للدالة <span class="math-display">f(x) = x⁴ - 2x²</span>، ما عدد القيم القصوى النسبية؟', en: '<strong>Question 17:</strong> For <span class="math-display">f(x) = x⁴ - 2x²</span>, how many relative extrema are there?' },
+                    options: [
+                        { ar: '3 (قيمة عظمى واحدة وقيمتان صغريان)', en: '3 (one max and two min)' },
+                        { ar: '2 (قيمة عظمى وصغرى)', en: '2 (one max and one min)' },
+                        { ar: '1 (قيمة عظمى فقط)', en: '1 (one max only)' },
+                        { ar: '4 قيم قصوى', en: '4 extrema' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 4x³ - 4x = 4x(x²-1) = 0 → x = 0, ±1. ثلاث نقاط حرجة → 3 قيم قصوى نسبية (عظمى عند 0، صغرى عند ±1)', en: 'f\'(x) = 4x(x²-1) = 0 → x = 0, ±1. Three critical points → 3 relative extrema (max at 0, min at ±1)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 18:</strong> للدالة <span class="math-display">f(x) = x⁴</span>، ما نوع النقطة عند x = 0؟', en: '<strong>Question 18:</strong> For <span class="math-display">f(x) = x⁴</span>, what type of point is at x = 0?' },
+                    options: [
+                        { ar: 'قيمة صغرى نسبية (ومطلقة)', en: 'Relative (and absolute) minimum' },
+                        { ar: 'قيمة عظمى نسبية', en: 'Relative maximum' },
+                        { ar: 'نقطة انعطاف فقط', en: 'Inflection point only' },
+                        { ar: 'لا قيمة قصوى', en: 'No extremum' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f(x) = x⁴ ≥ 0 دائماً، و f(0) = 0 هي أقل قيمة. إذن x = 0 قيمة صغرى نسبية ومطلقة', en: 'f(x) = x⁴ ≥ 0 always, and f(0) = 0 is the lowest value. So x = 0 is relative (and absolute) minimum' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 19:</strong> للدالة <span class="math-display">f(x) = -x⁴ + 4x²</span>، ما إحداثيات x للقيم العظمى النسبية؟', en: '<strong>Question 19:</strong> For <span class="math-display">f(x) = -x⁴ + 4x²</span>, what are the x-coordinates of relative maxima?' },
+                    options: [
+                        { ar: '<span class="math-display">x ≈ ±1.41</span>', en: '<span class="math-display">x ≈ ±1.41</span>' },
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: '<span class="math-display">x = ±2</span>', en: '<span class="math-display">x = ±2</span>' },
+                        { ar: '<span class="math-display">x = ±1</span>', en: '<span class="math-display">x = ±1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = -4x³ + 8x = -4x(x²-2) = 0 → x = 0 أو x = ±√2 ≈ ±1.41. f(0) = 0 (صغرى)، f(±1.41) = 4 (عظمى)', en: 'f\'(x) = -4x(x²-2) = 0 → x = 0 or x = ±√2 ≈ ±1.41. f(0) = 0 (min), f(±1.41) = 4 (max)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 20:</strong> أي دالة لها شكل W (قيمتان صغريان وقيمة عظمى واحدة بينهما)؟', en: '<strong>Question 20:</strong> Which function has a W-shape (two minima and one maximum between them)?' },
+                    options: [
+                        { ar: '<span class="math-display">f(x) = x⁴ - 4x²</span>', en: '<span class="math-display">f(x) = x⁴ - 4x²</span>' },
+                        { ar: '<span class="math-display">f(x) = x³ - 3x</span>', en: '<span class="math-display">f(x) = x³ - 3x</span>' },
+                        { ar: '<span class="math-display">f(x) = x² - 4</span>', en: '<span class="math-display">f(x) = x² - 4</span>' },
+                        { ar: '<span class="math-display">f(x) = -x⁴ + 4x²</span>', en: '<span class="math-display">f(x) = -x⁴ + 4x²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f(x) = x⁴ - 4x² لها شكل W: صغرى عند x ≈ ±1.41 وعظمى عند x = 0. (الشكل M يكون عندما يكون المعامل الرئيسي سالباً)', en: 'f(x) = x⁴ - 4x² has W-shape: min at x ≈ ±1.41 and max at x = 0. (M-shape when leading coefficient is negative)' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: عدد القيم القصوى (Q21-Q25)', en: '🔹 Section 5: Number of Extrema (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 21:</strong> ما أكبر عدد ممكن من القيم القصوى النسبية لكثير حدود من الدرجة 5؟', en: '<strong>Question 21:</strong> What is the maximum number of relative extrema for a degree 5 polynomial?' },
+                    svg: svgGraphs.extrema_concepts,
+                    options: [
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' },
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">6</span>', en: '<span class="math-display">6</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'أكبر عدد لنقاط الانعطاف = n - 1 = 5 - 1 = 4. إذن أكبر عدد للقيم القصوى النسبية = 4', en: 'Maximum turning points = n - 1 = 5 - 1 = 4. So maximum relative extrema = 4' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 22:</strong> ما أكبر عدد ممكن من القيم القصوى النسبية لكثير حدود من الدرجة 4؟', en: '<strong>Question 22:</strong> What is the maximum number of relative extrema for a degree 4 polynomial?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span>', en: '<span class="math-display">3</span>' },
+                        { ar: '<span class="math-display">4</span>', en: '<span class="math-display">4</span>' },
+                        { ar: '<span class="math-display">2</span>', en: '<span class="math-display">2</span>' },
+                        { ar: '<span class="math-display">5</span>', en: '<span class="math-display">5</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'أكبر عدد لنقاط الانعطاف = n - 1 = 4 - 1 = 3. مثال: x⁴ - 4x² له 3 قيم قصوى', en: 'Maximum turning points = n - 1 = 4 - 1 = 3. Example: x⁴ - 4x² has 3 extrema' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 23:</strong> كثير حدود من الدرجة 3 له قيمتان قصويتان نسبيتان. ما نوعهما؟', en: '<strong>Question 23:</strong> A degree 3 polynomial has two relative extrema. What are they?' },
+                    options: [
+                        { ar: 'قيمة عظمى نسبية واحدة وقيمة صغرى نسبية واحدة', en: 'One relative max and one relative min' },
+                        { ar: 'قيمتان عظميان نسبيتان', en: 'Two relative maxima' },
+                        { ar: 'قيمتان صغريان نسبيتان', en: 'Two relative minima' },
+                        { ar: 'ثلاث قيم قصوى نسبية', en: 'Three relative extrema' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'كثير الحدود التكعيبي (درجة 3) له على الأكثر نقطتا انعطاف: واحدة عظمى والأخرى صغرى', en: 'Cubic polynomial (degree 3) has at most 2 turning points: one max and one min' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 24:</strong> إذا كان لكثير حدود من الدرجة 6 ثلاث قيم عظمى نسبيتان، فكم قيمة صغرى نسبية له على الأكثر؟', en: '<strong>Question 24:</strong> If a degree 6 polynomial has two relative maxima, how many relative minima can it have at most?' },
+                    options: [
+                        { ar: '<span class="math-display">3</span> (ثلاث قيم صغرى)', en: '<span class="math-display">3</span> (three minima)' },
+                        { ar: '<span class="math-display">2</span> (قيمتان صغريان)', en: '<span class="math-display">2</span> (two minima)' },
+                        { ar: '<span class="math-display">4</span> (أربع قيم صغرى)', en: '<span class="math-display">4</span> (four minima)' },
+                        { ar: '<span class="math-display">1</span> (قيمة صغرى واحدة)', en: '<span class="math-display">1</span> (one minimum)' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'الدرجة 6 → على الأكثر 5 نقاط انعطاف. إذا كان هناك 2 عظمى، فالباقي 3 يمكن أن تكون صغرى (بالتناوب: عظمى، صغرى، عظمى، صغرى، صغرى)', en: 'Degree 6 → at most 5 turning points. If 2 are maxima, remaining 3 can be minima (alternating: max, min, max, min, min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 25:</strong> أي عبارة صحيحة عن القيم القصوى النسبية؟', en: '<strong>Question 25:</strong> Which statement about relative extrema is true?' },
+                    options: [
+                        { ar: 'القيمة العظمى النسبية هي الأعلى في جوارها فقط، وليست بالضرورة الأعلى في الدالة كلها', en: 'Relative max is highest in its neighborhood only, not necessarily highest overall' },
+                        { ar: 'القيمة العظمى النسبية هي دائماً أعلى قيمة في الدالة', en: 'Relative max is always the highest value in the function' },
+                        { ar: 'كل دالة لها قيمة عظمى نسبية واحدة فقط', en: 'Every function has only one relative max' },
+                        { ar: 'القيم القصوى النسبية توجد فقط عند x = 0', en: 'Relative extrema only occur at x = 0' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'القيمة العظمى النسبية (Local/Relative Max) هي أعلى نقطة في منطقة صغيرة حولها، لكن قد توجد نقاط أعلى في أماكن أخرى من الدالة', en: 'Relative max is highest point in a small neighborhood, but there may be higher points elsewhere in the function' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: مسائل مركبة (Q26-Q30)', en: '🔹 Section 6: Mixed Problems (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: '<strong>السؤال 26:</strong> للدالة <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>، ما القيمة العظمى النسبية التقريبية؟', en: '<strong>Question 26:</strong> For <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>, what is the approximate relative maximum value?' },
+                    svg: svgGraphs.finding_extrema_methods,
+                    options: [
+                        { ar: 'تقريباً <span class="math-display">3.23</span> (عند x ≈ -0.23)', en: 'Approximately <span class="math-display">3.23</span> (at x ≈ -0.23)' },
+                        { ar: 'تقريباً <span class="math-display">-12</span> (عند x ≈ 2.90)', en: 'Approximately <span class="math-display">-12</span> (at x ≈ 2.90)' },
+                        { ar: 'تقريباً <span class="math-display">0</span> (عند x = 0)', en: 'Approximately <span class="math-display">0</span> (at x = 0)' },
+                        { ar: 'تقريباً <span class="math-display">5</span> (عند x = -1)', en: 'Approximately <span class="math-display">5</span> (at x = -1)' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 3x² - 8x - 2 = 0 → x ≈ -0.23. f(-0.23) ≈ (-0.23)³ - 4(-0.23)² - 2(-0.23) + 3 ≈ -0.012 - 0.212 + 0.46 + 3 ≈ 3.23', en: 'f\'(x) = 0 → x ≈ -0.23. f(-0.23) ≈ 3.23 (relative maximum)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 27:</strong> للدالة <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>، ما القيمة الصغرى النسبية التقريبية؟', en: '<strong>Question 27:</strong> For <span class="math-display">f(x) = x³ - 4x² - 2x + 3</span>, what is the approximate relative minimum value?' },
+                    options: [
+                        { ar: 'تقريباً <span class="math-display">-12.07</span> (عند x ≈ 2.90)', en: 'Approximately <span class="math-display">-12.07</span> (at x ≈ 2.90)' },
+                        { ar: 'تقريباً <span class="math-display">3.23</span> (عند x ≈ -0.23)', en: 'Approximately <span class="math-display">3.23</span> (at x ≈ -0.23)' },
+                        { ar: 'تقريباً <span class="math-display">-9</span> (عند x = 2)', en: 'Approximately <span class="math-display">-9</span> (at x = 2)' },
+                        { ar: 'تقريباً <span class="math-display">-17</span> (عند x = -2)', en: 'Approximately <span class="math-display">-17</span> (at x = -2)' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 0 → x ≈ 2.90. f(2.90) ≈ (2.90)³ - 4(2.90)² - 2(2.90) + 3 ≈ 24.39 - 33.64 - 5.80 + 3 ≈ -12.05 ≈ -12.07', en: 'f\'(x) = 0 → x ≈ 2.90. f(2.90) ≈ -12.07 (relative minimum)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 28:</strong> للدالة <span class="math-display">f(x) = x⁴ - 4x²</span>، ما القيمة العظمى النسبية؟', en: '<strong>Question 28:</strong> For <span class="math-display">f(x) = x⁴ - 4x²</span>, what is the relative maximum value?' },
+                    svg: svgGraphs.quartic_vs_cubic,
+                    options: [
+                        { ar: '<span class="math-display">0</span> (عند x = 0)', en: '<span class="math-display">0</span> (at x = 0)' },
+                        { ar: '<span class="math-display">-4</span> (عند x ≈ ±1.41)', en: '<span class="math-display">-4</span> (at x ≈ ±1.41)' },
+                        { ar: '<span class="math-display">4</span> (عند x = ±2)', en: '<span class="math-display">4</span> (at x = ±2)' },
+                        { ar: 'لا توجد قيمة عظمى نسبية', en: 'No relative maximum' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f\'(x) = 4x³ - 8x = 4x(x²-2) = 0 → x = 0 أو x = ±√2. f(0) = 0 (عظمى نسبية)، f(±√2) = 4 - 8 = -4 (صغرى نسبية)', en: 'f\'(x) = 4x(x²-2) = 0 → x = 0 or x = ±√2. f(0) = 0 (relative max), f(±√2) = -4 (relative min)' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 29:</strong> للدالة <span class="math-display">f(x) = x⁴ - 4x²</span>، ما القيمة الصغرى النسبية؟', en: '<strong>Question 29:</strong> For <span class="math-display">f(x) = x⁴ - 4x²</span>, what is the relative minimum value?' },
+                    options: [
+                        { ar: '<span class="math-display">-4</span> (عند x ≈ ±1.41)', en: '<span class="math-display">-4</span> (at x ≈ ±1.41)' },
+                        { ar: '<span class="math-display">0</span> (عند x = 0)', en: '<span class="math-display">0</span> (at x = 0)' },
+                        { ar: '<span class="math-display">-2</span> (عند x = ±1)', en: '<span class="math-display">-2</span> (at x = ±1)' },
+                        { ar: '<span class="math-display">-16</span> (عند x = ±2)', en: '<span class="math-display">-16</span> (at x = ±2)' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f(±√2) = (√2)⁴ - 4(√2)² = 4 - 8 = -4. إذن القيمة الصغرى النسبية = -4 عند x ≈ ±1.41', en: 'f(±√2) = 4 - 8 = -4. So relative minimum = -4 at x ≈ ±1.41' }
+                },
+                {
+                    q: { ar: '<strong>السؤال 30:</strong> أي عبارة تصف بشكل صحيح العلاقة بين درجة كثير الحدود وعدد قيمه القصوى النسبية؟', en: '<strong>Question 30:</strong> Which statement correctly describes the relationship between polynomial degree and number of relative extrema?' },
+                    svg: svgGraphs.common_mistakes_extrema,
+                    options: [
+                        { ar: 'عدد القيم القصوى النسبية ≤ درجة كثير الحدود - 1', en: 'Number of relative extrema ≤ degree - 1' },
+                        { ar: 'عدد القيم القصوى النسبية = درجة كثير الحدود دائماً', en: 'Number of relative extrema = degree always' },
+                        { ar: 'عدد القيم القصوى النسبية > درجة كثير الحدود', en: 'Number of relative extrema > degree' },
+                        { ar: 'لا توجد علاقة', en: 'No relationship' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عدد نقاط الانعطاف (وبالتالي القيم القصوى النسبية) ≤ n - 1 حيث n درجة كثير الحدود. مثال: درجة 3 → على الأكثر 2 قيمة قصوى', en: 'Number of turning points (and thus relative extrema) ≤ n - 1 where n is degree. Example: degree 3 → at most 2 extrema' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + lang);
+    });
+    
+    document.querySelectorAll('[data-placeholder-ar]').forEach(el => {
+        el.placeholder = el.getAttribute('data-placeholder-' + lang);
+    });
+    
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['a)', 'b)', 'c)', 'd)'], answer: '✅ الإجابة:' }, en: { option: ['a)', 'b)', 'c)', 'd)'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '" style="border-right: 4px solid #d97706; padding-right: 1rem;">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> ' + q.q[currentLang] + '<br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition" style="margin-right: 1rem;">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ' ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ' <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<div style="font-family:Arial; direction:rtl;">';
+    questionsHTML += '<h2>📈 ' + (currentLang === 'ar' ? 'نتيجة امتحان القيم القصوى النسبية' : 'Relative Extrema Exam Result') + '</h2>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الاسم' : 'Name') + ':</strong> ' + name + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الشعبة' : 'Class') + ':</strong> ' + studentClass + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التاريخ' : 'Date') + ':</strong> ' + date + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الدرجة' : 'Score') + ':</strong> ' + score + ' (' + successRate + '%)</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التقدير' : 'Grade') + ':</strong> ' + badge + '</p>';
+    questionsHTML += '<hr><h3>' + (currentLang === 'ar' ? 'تفاصيل الإجابات:' : 'Answer Details:') + '</h3><table style="width:100%; border-collapse:collapse;">';
+    questionsHTML += '<tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'السؤال' : 'Question') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'الصحيحة' : 'Correct') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'النتيجة' : 'Result') + '</th></tr>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si][currentLang];
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct][currentLang];
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar.replace(/<[^>]+>/g, '').substring(0, 80) + '...</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</table></div>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+            status.style.color = '#16a34a';
+            btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+            alert(currentLang === 'ar' ? 'تم إرسال النتيجة للمعلم بنجاح!' : 'Result sent to teacher successfully!');
+        })
+        .catch((error) => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال' : '❌ Failed to send';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+            alert(currentLang === 'ar' ? 'فشل الإرسال: ' + error.text : 'Failed: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+    } else {
+        currentSeed = Date.now();
+    }
+    
+    document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+    document.body.classList.toggle('en-mode', currentLang === 'en');
+    document.documentElement.lang = currentLang;
+    document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    
+    document.querySelectorAll('[data-ar]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + currentLang);
+    });
+    
+    document.querySelectorAll('[data-placeholder-ar]').forEach(el => {
+        el.placeholder = el.getAttribute('data-placeholder-' + currentLang);
+    });
+    
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
